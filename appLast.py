@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,redirect,url_for,jsonify
+from flask import Flask,render_template,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, template_folder='templates')
