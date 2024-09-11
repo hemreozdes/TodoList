@@ -15,7 +15,7 @@ class TodoItem(db.Model):
 @app.route("/")
 def index():
     tasks = TodoItem.query.all()
-    return render_template('indexLast.html', tasks=tasks)
+    return render_template('index.html', tasks=tasks)
 
 @app.route('/add', methods=['POST'])
 def add_task():
