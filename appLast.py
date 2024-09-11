@@ -17,30 +17,29 @@ def index():
     tasks = TodoItem.query.all()
     return render_template('indexLast.html', tasks=tasks)
 
-todo_id=0
 @app.route('/add', methods=['POST'])
 def add_task():
     global todo_id
     data = request.get_json() 
     name = data['name']
     priority = data['priority']
-    todo_id += 1 
-    new_task = TodoItem(id = todo_id ,name=name, priority=priority,status=False)
+    new_task = TodoItem(name=name, priority=priority,status=False)
     db.session.add(new_task)
     db.session.commit()
+    todo_id=new_task.id
     return jsonify({'id': todo_id, 'name': name, 'priority': priority})
 
-@app.route("/complete/<priority>/<int:todo_id>", methods=['POST'])
-def complete(priority,todo_id):
-    todo = TodoItem.query.filter_by(id=todo_id,priority=priority).first()
+@app.route("/complete/<int:todo_id>", methods=['POST'])
+def complete(todo_id):
+    todo = TodoItem.query.filter_by(id=todo_id).first()
     if todo:
         todo.status = True
         db.session.commit()
     return '',200
 
-@app.route("/delete/<priority>/<int:todo_id>", methods=['POST'])
-def delete(priority,todo_id):
-    task = TodoItem.query.filter_by(id=todo_id, priority=priority).first()
+@app.route("/delete/<int:todo_id>", methods=['POST'])
+def delete(todo_id):
+    task = TodoItem.query.filter_by(id=todo_id).first()
     if task:
         db.session.delete(task)
         db.session.commit()

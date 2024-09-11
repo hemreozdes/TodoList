@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            body{
+                background-size: cover; 
+                background-position: center;
+                background-repeat: no-repeat;
+                justify-content: center;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+                background-color: #bcdefa; 
+            }
+            i{
+                font-size: 25px;
+            }
+            h2{
+                display: flex;
+                float: left;
+            }
+            form{
+                align-items: center;
+                text-align: center;
+            }
+            li{
+                font-style: italic;
+                text-decoration: solid;
+            }
+            
+            table{
+                border-collapse: collapse;
+                margin: auto;
+                text-align: center;
+            }
+            #trtable {
+                height: 350px; 
+                overflow-y: auto; 
+            }
+
+            #trtable tbody {
+                height: auto; 
+            }
+            th {
+                width: 240px;
+                border: 1px solid #ddd;
+            }
+            .actions a {
+                margin: 0 5px;
+            }
+            #form{
+                align-items: center;
+                text-align: center;
+            }
+            #high-priority{
+                background-color: rgba(255, 0, 0, 0.275);
+            }
+            #medium-priority{
+                background-color: rgba(255, 166, 0, 0.227);
+            }
+            #low-priority{
+                background-color: rgba(128, 128, 128, 0.212);
+            }
+            #enday{
+                background-color: rgba(0, 128, 0, 0.258);
+            }
+            .custom-btn {
+                background-color: #40e0d0; /* Turkuaz iç renk */
+                background-image: linear-gradient(to right, rgb(22, 48, 127), #48a4ff);
+                border: 2px solid transparent;
+                border-image: linear-gradient(to right, navy, #1e90ff);
+                border-image-slice: 1;
+                transition: background-color 0.3s ease, border-color 0.3s ease;
+                color: white;
+                border-radius:10px;
+                width: 100px;
+            }
+            .circular-btn {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                font-size: 24px;
+                padding: 0;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                transition: transform 0.5s linear;
+                animation: none;
+            }
+            .circular-btn:hover {
+                animation: rotateButton 2s linear infinite;
+                background-color: #007bff;
+            }
+            @keyframes rotateButton {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+            @keyframes lightTransition {
+                0% {
+                  background-position: -100%;
+                }
+                50% {
+                  background-position: 100%;
+                }
+                100% {
+                  background-position: -100%;
+                }
+              }
+            .bi-check-circle-fill{
+                overflow: hidden; /* Taşmaları engellemek için */
+            }
+            .title {
+                text-shadow: 6px 6px 12px rgba(0, 0, 0, 0.6);
+                margin: 0;
+                padding: 10px;
+                font-family: 'Roboto Slab', serif;
+                display: inline-block;
+                position: relative;
+                font-weight: bold;
+                overflow: hidden;
+                color: #0033cc;
+                background: linear-gradient(to right, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 100%);
+                background-size: 200% 100%;
+                animation: lightTransition 4s linear infinite;
+                font-size: 3rem;
+                }
+              
+            .title::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: skewX(-20deg);
+                animation: lightTransition 2s linear infinite;
+                }
+            #table0 {
+                padding: 20px;
+            }
+            .full-width-table {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+            #table1{
+                margin: auto;
+                text-align: center;
+                border: none;
+            }
+            #date-time {
+                display: flex;
+                justify-content: space-between;
+                width: 50%;
+                margin-left: 25%;
+            }
+            #date, #time {
+                flex: 1;
+                text-align: center;
+            }
+            #date i, #time i {
+                margin-right: 5px;
+                text-align: center;
+            }
+            #date i {
+                color: #0033cc;
+            }
+            #time i {
+                color: #0033cc;
+            }
+            #high-priority, #medium-priority, #low-priority {
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 15px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                transition: transform 0.8s ease, box-shadow 0.3s ease;
+            }
+            #high-priority:hover, #medium-priority:hover, #low-priority:hover {
+                transform: scale(1.03);
+                box-shadow: 0 0 15px rgba(105, 105, 105, 0.025);
+            }
+            #user-info {
+                position: fixed;
+                top: 10px;
+                right: 20px;
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .sortable {
+                min-height: 100px;
+                padding: 0;
+                margin: 0;
+                list-style-type: none;
+            }
+            
+            .sortable li {
+                margin: 5px 0;
+                padding: 5px;
+                cursor: move;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>To-Do List</title>
+    </head>
+    <body>
+        <div>
+            <table class="full-width-table" style="border:10px;">
+                <tr style="background-color: #bcdefa;">
+                    <td id="table0"><h1 class="title" style="text-decoration:underline;">Pomodoro Planner</h1></td>
+                </tr>
+                <tr>
+                    <td id="table1">
+                        <span id="date-time">
+                            <i class="fas fa-calendar-day"></i>
+                            <span id="date"></span>
+                            <span id="time"></span>
+                            <i class="fas fa-clock"></i>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="table2" class="text-center">
+                        <button id="showFormButton" class="circular-btn">Start</button>
+                        <form id="addTaskForm" class="p-4 mt-3 position-relative" style="margin: 2px; text-align: center; display: none;border: 2px solid navy; border-radius: 10px; background-color: #e0f7ff; height: 100px; width: 800px; margin: auto;" >
+                            <button id="hideFormButton" type="button" class="btn position-absolute" style="top: -8px; right: 0px;padding: 0; border: none; background: transparent;"><i class="bi bi-x-lg"></i>
+                            </button>   
+                            <div class="d-flex align-items-center justify-content-center h-70">
+                                <div class="d-flex align-items-center mx-2">
+                                    <input type="text" id="name" placeholder="Enter a task" required>
+                                </div>
+                                <div class="d-flex align-items-center mx-1">
+                                    <label for="priority" class="form-label me-2">Priority:</label>
+                                    <select id="priority" name="priority" class="form-select" required style="flex: 1;">
+                                        <option value="High">High</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Low">Low</option>
+                                    </select>
+                                </div>
+                                <button id="addTask" type="button" class="btn custom-btn">Add</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-columns">
+                <thead>
+                <tr id="th">
+                    <th style="color: red;">High Priority</th>
+                    <th style="color: orange;">Medium Priority</th>
+                    <th style="color: gray;">Low Priority</th>
+                    <form id="clear_end_of_day" action="{{ url_for('end_of_day') }}" method="post"><th style="color: rgba(172, 255, 47, 0.755);"><button style="border: none; padding:0px; background-color:white; color:rgba(0, 128, 0, 0.695)">End of Day</button></th></form>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="trtable">
+                    <div class="list">
+                    <td id="high-priority">
+                        <ul id="high-priorityul" data-priority="High" class="sortable">
+                            {% for todo in tasks%}
+                            {% if todo.priority == 'High' %}
+                            {% if todo.status==0 %}
+                            <li id="task-{{todo.id}}" data-priority="{{taskPriority}}" draggable="true">
+                                {{ todo.name }}
+                                <button onclick="startTimer('{{ todo.id }}', '{{ todo.name }}')"><i class="bi bi-alarm "style="font-size: 1em"></i></button> 
+                                <span id="timer-{{todo.id}}"></span>
+                                <div class="actions">
+                                    <a href="#" class="completeTask" data-priority="{{ todo.priority }}" data-id="{{ todo.id }}">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </a>
+                                    <a href="#" class="deleteTask" data-priority="{{ todo.priority }}" data-id="{{ todo.id }}">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </a>                                
+                                </div>
+                            </li>
+                            {%endif%}
+                            {% endif %}
+                            {%endfor%}
+                        </ul>
+                    </td></div>
+                    <div class="list">
+                    <td id="medium-priority">
+                        <ul id="medium-priorityul" data-priority="Medium" class="sortable">
+                            {% for todo in tasks%}
+                            {%if todo.priority=='Medium' %}
+                            {% if todo.status==0 %}
+                            <li id="task-{{todo.id}}" data-priority="{{taskPriority}}" draggable="true">
+                                {{ todo.name }}
+                                <button onclick="startTimer('{{ todo.id }}', '{{ todo.name }}')"><i class="bi bi-alarm "style="font-size: 1em"></i></button> 
+                                <span id="timer-{{todo.id}}"></span>
+                                <div class="actions">
+                                    <a href="#" class="completeTask" data-priority="{{ todo.priority }}" data-id="{{ todo.id }}">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </a>
+                                    <a href="#" class="deleteTask" data-priority="{{ todo.priority }}" data-id="{{ todo.id }}">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </a>                                
+                                </div>
+                            </li>
+                            {%endif%}
+                            {% endif %}
+                            {%endfor%}
+                        </ul>
+                    </td></div>
+                    <div class="list">
+                    <td id="low-priority">
+                        <ul id="low-priorityul" data-priority="Low" class="sortable">
+                            {% for todo in tasks%}
+                            {%if todo.priority=='Low' %}
+                            {% if todo.status==0 %}
+                            <li id="task-{{todo.id}}" data-priority="{{taskPriority}}" draggable="true">
+                                {{ todo.name }}
+                                <button onclick="startTimer('{{ todo.id }}', '{{ todo.name }}')"><i class="bi bi-alarm "style="font-size: 1em"></i></button> 
+                                <span id="timer-{{todo.id}}"></span>
+                                <div class="actions">
+                                    <a href="#" class="completeTask" data-priority="{{ todo.priority }}" data-id="{{ todo.id }}">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </a>
+                                    <a href="#" class="deleteTask" data-priority="{{ todo.priority }}" data-id="{{ todo.id }}">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </a>                               
+                                </div>
+                            </li>
+                            {% endif %}
+                            {%endif%}
+                            {%endfor%}
+                        </ul>
+                    </td></div>
+                    <td id="enday">
+                        <ul id="endayul">
+                            {% for todo in tasks %}
+                            {% if todo.status==1 %}
+                                <li>
+                                    <strike>{{ todo.name }}</strike>                                
+                                </li>
+                            {%endif%}
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+            <script>
+                $(document).ready(function(){
+                    $('#showFormButton').click(function(){
+                        $(this).hide(); 
+                        $('#addTaskForm').show(); 
+                    });
+                    $('#hideFormButton').click(function(){
+                        $('#addTaskForm').hide(); 
+                        $('#showFormButton').show(); 
+                    });
+                });
+
+                  
+                let cycleCount = 0;
+                const activeTimers = {};
+                function startTimer(taskId, taskName) {
+                    if (activeTimers[taskId]) {
+                        clearInterval(activeTimers[taskId]);
+                        console.log(`Previous timer cleared for ${taskName}.`);
+                    }
+                    console.log(`Timer started for ${taskName}.`);
+                    const timerElement = document.getElementById(`timer-${taskId}`);
+                    let timeLeft = 25 * 60; // 25 minutes in seconds
+                    const interval = setInterval(function() {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; //if the seconds are less than 10,it adds a leading '0' to the seconds
+                        if (timeLeft <= 0) {
+                            clearInterval(interval);
+                            console.log(`25 minutes have passed for ${taskName}.`);
+                            alert(`Time's up for ${taskName}!`);
+                            cycleCount++;
+                            if (cycleCount % 4 === 0) {
+                                startExtendedRest(taskId, taskName);
+                            } else {
+                                startFiveMinuteAlert(taskId, taskName);
+                            }
+                        }
+                        timeLeft -= 1;
+                    }, 1000); // Update every second
+                    activeTimers[taskId] = interval;
+                }
+                function startFiveMinuteAlert(taskId, taskName) {
+                    if (activeTimers[taskId]) {
+                        clearInterval(activeTimers[taskId]);
+                    }
+                    const timerElement = document.getElementById(`timer-${taskId}`);
+                    let alertTimeLeft = 5 * 60; // 5 minutes in seconds
+                    const alertInterval = setInterval(function() {
+                        let minutes = Math.floor(alertTimeLeft / 60);
+                        let seconds = alertTimeLeft % 60;
+                        timerElement.textContent = `Rest for: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; //if the seconds are less than 10,it adds a leading '0' to the seconds
+                        if (alertTimeLeft <= 0) {
+                            clearInterval(alertInterval);//Stops the timer by clearing the interval
+                            timerElement.textContent = "5-minute rest period ended!";
+                            console.log(`5-minute rest period ended for ${taskName}.`);
+                        }
+                        alertTimeLeft -= 1;
+                    }, 1000);
+                    activeTimers[taskId] = interval;
+                }
+                function startExtendedRest(taskId, taskName) {
+                    if (activeTimers[taskId]) {
+                        clearInterval(activeTimers[taskId]);
+                    }
+                    const timerElement = document.getElementById(`timer-${taskId}`);
+                    let restTimeLeft = 15 * 60; // 15 minutes in seconds
+                    const restInterval = setInterval(function() {
+                        let minutes = Math.floor(restTimeLeft / 60);
+                        let seconds = restTimeLeft % 60;
+                        timerElement.textContent = `Extended rest: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                        if (restTimeLeft <= 0) {
+                            clearInterval(restInterval);
+                            timerElement.textContent = "Extended rest period ended!";
+                            console.log(`15-minute extended rest period ended for ${taskName}.`);
+                            startTimer(taskId, taskName);
+                            cycleCount = 0; // Reset the cycle count after extended rest
+                        }
+                        restTimeLeft -= 1;
+                    }, 1000);
+                    activeTimers[taskId] = restInterval;
+                }
+                function updateDateTime() {
+                    const now = new Date();
+                    const dateString = now.toLocaleDateString(); // Date
+                    const timeString = now.toLocaleTimeString(); // Clock
+                
+                    document.querySelector('#date').textContent = dateString;
+                    document.querySelector('#time').textContent = timeString;
+                }
+                
+                setInterval(updateDateTime, 1000);
+                
+
+
+
+
+                $(document).ready(function() {
+                    $('#clear_end_of_day').on('submit', function(event) {
+                        event.preventDefault();
+                        $.ajax({
+                            url: '/end_of_day',
+                            type: 'POST',
+                            success: function(response) {
+                                $('#endayul').empty(); 
+                            }
+                        });
+                    });
+                });
+
+
+
+
+                $('#addTask').on('click', function() {
+                    var taskName = $('#name').val();
+                    var taskPriority = $('#priority').val();
+                    addTask(taskName, taskPriority);
+                });
+                function addTask(taskName, taskPriority) {
+                    $.ajax({
+                        url: '/add',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            name: taskName,
+                            priority: taskPriority,
+                        }),
+                        success: function(response) {
+                            var taskName = response.name;
+                            var taskPriority = response.priority;
+                            let taskId=response.id;
+                            var newTask = `
+                                <li id="task-${taskId}" data-priority="${taskPriority}" draggable="true">
+                                    ${taskName}
+                                    <button onclick="startTimer('${taskId}', '${taskName}')"><i class="bi bi-alarm "style="font-size: 1em"></i></button> 
+                                    <span id="timer-${taskId}"></span>
+                                    <div class="actions">
+                                        <a href="#" class="completeTask" data-priority="${taskPriority}" data-id="${taskId}" >
+                                            <i class="bi bi-check-circle-fill"></i>
+                                        </a>
+                                        <a href="#" class="deleteTask" data-priority="${taskPriority}" data-id="${taskId}" >
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        </a>                   
+                                    </div>
+                                </li>`;
+                            if (taskPriority === 'High') {
+                                $('#high-priorityul').append(newTask);
+                            } else if (taskPriority === 'Medium') {
+                                $('#medium-priorityul').append(newTask);
+                            } else if (taskPriority === 'Low') {
+                                $('#low-priorityul').append(newTask);
+                            }
+                            document.getElementById(`task-${taskId}`).addEventListener('dragstart', function(e) {
+                                var taskData = {
+                                    id: taskId,
+                                    priority: taskPriority
+                                };
+                                e.dataTransfer.setData('application/json', JSON.stringify(taskData));
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error adding task:', error);
+                        }
+                    });
+                }
+
+
+
+
+                $(document).ready(function() {
+                    $(document).on('click', '.completeTask', function(event) {
+                        event.preventDefault();
+                        var taskId = $(this).data('id');
+                        console.log('Task ID:', taskId);
+                        $.ajax({
+                            url: `/complete/${taskId}`,
+                            type: 'POST',
+                            contentType: 'application/json',
+                            success: function(response) {
+                                var taskElement = $('#task-' + taskId);
+                                taskElement.find('.actions').remove();
+                                taskElement.find('span').remove();
+                                taskElement.find('button').remove();
+                                taskElement.html(`<strike>${taskElement.text()}</strike>`);
+                                $('#endayul').append(taskElement);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error completing task:', error);
+                            }
+                        });
+                    });
+                });
+
+
+
+
+
+
+                $(document).ready(function() {
+                    $(document).on('click', '.deleteTask', function(event) {
+                        event.preventDefault();
+                        var taskId = $(this).data('id');
+                        console.log('Task ID:', taskId);
+                        $.ajax({
+                            url: `/delete/${taskId}`,
+                            type: 'POST',
+                            contentType: 'application/json',
+                            success: function(response) {
+                                var taskElement = $('#task-' + taskId);
+                                taskElement.remove();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error deleting task:', error);
+                            }
+                        });
+                    });
+                });
+
+
+                
+
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    var lists = document.querySelectorAll('.sortable');
+                    lists.forEach(function(list) {
+                        list.addEventListener('dragstart', function(e) {
+                            var item = e.target.closest('li');
+                            var taskData = {
+                                id: item.getAttribute('id').split('-')[1],
+                                priority: item.getAttribute('data-priority')
+                            };
+                            e.dataTransfer.setData('application/json', JSON.stringify(taskData));
+                        });
+                        list.addEventListener('dragover', function(e) {
+                            e.preventDefault();
+                        });
+                        list.addEventListener('drop', function(e) {
+                            e.preventDefault();
+                            var jsonData = e.dataTransfer.getData('application/json');
+                            var taskData = JSON.parse(jsonData);
+                            var item = document.getElementById('task-' + taskData.id);
+                            var newPriority = e.target.closest('ul').getAttribute('data-priority');
+                            e.target.closest('ul').appendChild(item);
+                            updateTaskPriority(taskData.id, newPriority);
+                        });
+                    });
+                    function updateTaskPriority(taskId, newPriority) {
+                        $.ajax({
+                            url: '/update-task-priority',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                task_id: taskId,
+                                new_priority: newPriority
+                            }),
+                            success: function(response) {
+                                console.log('Priority updated successfully.');
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error updating priority:', error);
+                            }
+                        });
+                    }
+                });
+
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+        </body>
+        
+    </html>
