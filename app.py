@@ -27,6 +27,7 @@ def add_task():
     db.session.add(new_task)
     db.session.commit()
     todo_id=new_task.id
+    print(f'Task added: {new_task.id}, {new_task.name}, {new_task.priority}')
     return jsonify({'id': todo_id, 'name': name, 'priority': priority})
 
 @app.route("/complete/<int:todo_id>", methods=['POST'])
@@ -35,6 +36,7 @@ def complete(todo_id):
     if todo:
         todo.status = True
         db.session.commit()
+        print(f'Task completed: {todo.id}')
     return '',200
 
 @app.route("/delete/<int:todo_id>", methods=['POST'])
@@ -43,6 +45,7 @@ def delete(todo_id):
     if task:
         db.session.delete(task)
         db.session.commit()
+        print(f'Task deleted: {task.id}')
     return jsonify({'status': 'success'}),200
 
 @app.route("/end_of_day", methods=["POST"])
@@ -51,6 +54,7 @@ def end_of_day():
     for task in completed_tasks:
         db.session.delete(task)
     db.session.commit()
+    print(f'End of day: All completed tasks deleted')
     return '',200
 
 @app.route('/update-task-priority', methods=['POST'])
@@ -63,6 +67,7 @@ def update_task_priority():
         if task:
             task.priority = new_priority
             db.session.commit()
+            print(f'Task priority updated: {task.id}, new priority: {new_priority}')
             return jsonify({'status': 'success'})
         else:
             return jsonify({'status': 'error', 'message': 'Task not found'}), 404

@@ -459,6 +459,11 @@
                             type: 'POST',
                             success: function(response) {
                                 $('#endayul').empty(); 
+                                console.log('End of day tasks cleared successfully.');
+
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error clearing end of day tasks:', error);
                             }
                         });
                     });
@@ -506,6 +511,8 @@
                             } else if (taskPriority === 'Low') {
                                 $('#low-priorityul').append(newTask);
                             }
+                            console.log(`Task added successfully. Task ID: ${taskId}, Name: ${taskName}, Priority: ${taskPriority}`);
+
                             document.getElementById(`task-${taskId}`).addEventListener('dragstart', function(e) {
                                 var taskData = {
                                     id: taskId,
@@ -539,6 +546,9 @@
                                 taskElement.find('button').remove();
                                 taskElement.html(`<strike>${taskElement.text()}</strike>`);
                                 $('#endayul').append(taskElement);
+
+                                console.log('Task completed successfully. Task ID:', taskId);
+
                             },
                             error: function(xhr, status, error) {
                                 console.error('Error completing task:', error);
@@ -564,6 +574,8 @@
                             success: function(response) {
                                 var taskElement = $('#task-' + taskId);
                                 taskElement.remove();
+                                console.log('Task deleted successfully. Task ID:', taskId);
+
                             },
                             error: function(xhr, status, error) {
                                 console.error('Error deleting task:', error);
